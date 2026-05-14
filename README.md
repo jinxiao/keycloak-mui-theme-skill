@@ -6,12 +6,19 @@ This repository contains a Codex skill for creating, modifying, and reviewing Ke
 
 - Default theme scope is `login` only.
 - Other Keycloak scopes, such as `admin`, `account`, or `email`, are supported only when the user explicitly requests them.
+- New themes must be built from the correct official Keycloak source contract for the target Keycloak version.
+- FTL-based scopes such as `login` and `email` must follow official FTL files.
+- React console-based scopes such as `admin` and `account` must follow official React console routes, shell, page modules, state models, and API interaction patterns.
+- If a request does not specify a concrete FTL file or subset for an FTL-based scope, all official FTL files for the selected scope should be implemented.
+- Admin/account themes are not judged by FTL coverage. They require Storybook coverage for the implemented official React console modules.
 - UI should use MUI-native components, colors, typography, spacing, and `@mui/icons-material` icons.
 - Buttons on the same page or logical section should use consistent sizing.
 - MUI dependencies and components should stay on the latest stable version compatible with the project.
 - Every implemented or modified theme scope must include Storybook coverage.
+- Every implemented official FTL page or React console module should have corresponding Storybook stories.
 - Storybook should use the latest stable release channel, with matching `storybook` and `@storybook/*` package majors.
 - Stories should cover official Keycloak original page structures and states, not only custom happy paths.
+- Admin Storybook stories should use `Admin/<Domain>/<Page>/<State>` naming and include shell, route, permission, data, form, error, and destructive-action states.
 - GitHub Actions should use current action versions and Node24-compatible runtimes to avoid Node20 deprecation warnings.
 
 ## Skill Layout

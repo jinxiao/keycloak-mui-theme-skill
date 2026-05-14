@@ -1,4 +1,4 @@
 interface:
   display_name: "Keycloak MUI Theme"
   short_description: "Create and review Keycloak MUI themes with latest stable Storybook coverage."
-  default_prompt: "Create or update a Keycloak theme that follows MUI-native components, colors, icons, sizing consistency, theme-scope defaults, latest stable Storybook setup, complete stories matching official Keycloak page states, and current GitHub Actions runtimes."
+  default_prompt: "Create or update a Keycloak theme that preserves existing configured theme scopes, follows MUI-native components, colors, icons, sizing consistency, login-by-default new scope behavior, latest stable Storybook setup, complete stories matching official Keycloak page states, and current GitHub Actions runtimes."

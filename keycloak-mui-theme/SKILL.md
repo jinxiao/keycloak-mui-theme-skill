@@ -11,9 +11,13 @@ Use this skill to keep Keycloak theme work focused, MUI-native, and maintainable
 
 ## Scope Rules
 
-- Treat `login` as the only supported theme scope by default.
-- Do not create or modify `account`, `admin`, `email`, or other Keycloak theme types unless the user names that scope or approves expanding beyond login.
-- When the requested scope is ambiguous, implement the login theme path only and note the assumption.
+- Treat `login` as the only supported theme scope by default for newly created theme scopes.
+- Never delete, move, disable, overwrite, or de-register existing Keycloak theme scopes, configuration, files, Storybook stories, build entries, or package scripts as a way to satisfy the default login-only rule.
+- Preserve existing `account`, `admin`, `email`, or other non-login theme scopes unless the user explicitly asks to remove that scope.
+- If a user asks to inspect, review, or fix the whole project, treat existing configured theme scopes as intentionally supported. Fix them in place according to this skill instead of removing them.
+- Do not create new `account`, `admin`, `email`, or other Keycloak theme types unless the user names that scope or approves expanding beyond login.
+- When the requested scope is ambiguous and no non-login scope already exists, implement the login theme path only and note the assumption.
+- When the requested scope is ambiguous but non-login themes already exist, preserve them and either fix them if the request covers the whole project or report them as out of scope. Ask before making scope-removal changes.
 - Keep non-login theme code isolated from login theme code when an expanded scope is requested.
 
 ## MUI Requirements
@@ -30,12 +34,13 @@ Use this skill to keep Keycloak theme work focused, MUI-native, and maintainable
 ## Implementation Workflow
 
 1. Inspect the existing theme structure before editing. Identify whether the project is plain Keycloak theme code, Keycloakify, or another wrapper.
-2. Confirm the target theme scope from the request. Default to login.
-3. Reuse the repo's existing MUI theme provider, palette, component overrides, and layout conventions.
-4. If adding dependencies or new MUI APIs, prefer the latest stable MUI major compatible with the repo. Check `package.json`, lockfiles, and current imports before changing versions.
-5. Implement with MUI primitives first, then add local wrappers only when they remove real duplication or match an established local pattern.
-6. Add or update Storybook for every supported theme scope in the change.
-7. Validate responsive behavior for login pages: keyboard focus, password visibility, form errors, loading state, disabled state, and required Keycloak messages/links must remain accessible.
+2. Inventory existing theme scopes and their registration/configuration before changing files. Treat discovered scopes as user-owned unless the user explicitly asks to remove them.
+3. Confirm the target theme scope from the request. Default new work to login, while preserving existing scopes.
+4. Reuse the repo's existing MUI theme provider, palette, component overrides, and layout conventions.
+5. If adding dependencies or new MUI APIs, prefer the latest stable MUI major compatible with the repo. Check `package.json`, lockfiles, and current imports before changing versions.
+6. Implement with MUI primitives first, then add local wrappers only when they remove real duplication or match an established local pattern.
+7. Add or update Storybook for every supported theme scope in the change.
+8. Validate responsive behavior for login pages: keyboard focus, password visibility, form errors, loading state, disabled state, and required Keycloak messages/links must remain accessible.
 
 ## Storybook Requirements
 
@@ -65,7 +70,9 @@ Use this skill to keep Keycloak theme work focused, MUI-native, and maintainable
 
 ## Review Checklist
 
-- Is the change limited to login theme unless another scope was requested?
+- Does the change preserve all existing Keycloak theme scopes, registrations, files, Storybook stories, and scripts unless the user explicitly requested removal?
+- Is new theme-scope creation limited to login unless another scope was requested?
+- If existing admin/account/email themes are present, were they fixed in place for whole-project requests or clearly reported as out of scope instead of deleted?
 - Does every implemented or modified theme scope include Storybook setup and complete stories?
 - Is Storybook installed or upgraded using the latest stable release channel, with matching `storybook` and `@storybook/*` package majors?
 - Do the stories cover official Keycloak original page states rather than only custom happy paths?
